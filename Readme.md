@@ -99,6 +99,6 @@ From this I draw the following tentative conclusions:
 1. There is false sharing happening in mpsc_queue.
 2. The current fixed-size node cache in spsc_queue seems to be a pessimization,
 mainly due to contention over the counters.
-A version which only keeps counters on the consumer side only (shown in the last set above) performs significantly better.
+A version which only keeps counters on the consumer side only (shown in the last set above) can perform on par with an ubounded cache.
 3. False sharing may also become an issue for spsc_queue, but it is currently hidden by other overheads.
 4. Datastructure differences do not seem to account for all the difference in performance between shared and stream mode, though we would need more extensive benchmarking to really tell.
