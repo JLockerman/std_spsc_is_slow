@@ -1,0 +1,10 @@
+[package]
+name = "std_spsc_is_slow"
+version = "0.1.0"
+authors = ["Joshua Lockerman <>"]
+
+[dependencies]
+crossbeam = "0.3.0"
+
+[features]
+queue_experiments = []
