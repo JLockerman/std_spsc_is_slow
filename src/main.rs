@@ -76,7 +76,7 @@ fn main() {
         println!("no cache, aligned  {:>3.0} ns/send", bench_spsc_queue(spsc::Queue::aligned_no_cache()));
         println!("----");
         println!("less contention spsc {:>3.0} ns/send", bench_spsc2_queue(spsc2::Queue::new(128)));
-        println!("alinged              {:>3.0} ns/send", bench_spsc2_queue(spsc2::Queue::aligned(128)));
+        println!("aligned              {:>3.0} ns/send", bench_spsc2_queue(spsc2::Queue::aligned(128)));
         println!("aligned, size =    1 {:>3.0} ns/send", bench_spsc2_queue(spsc2::Queue::aligned(1)));
         println!("aligned, size =    8 {:>3.0} ns/send", bench_spsc2_queue(spsc2::Queue::aligned(8)));
         println!("aligned, size =   16 {:>3.0} ns/send", bench_spsc2_queue(spsc2::Queue::aligned(16)));
@@ -97,7 +97,7 @@ fn bench_mpsc_stream() -> f64 {
 
 fn bench_mpsc_shared() -> f64 {
     let (sender, reciever) = channel();
-    // this clone make the benchmark faster
+    // this clone forces the queue into shared mode and makes the benchmark faster
     let _clone = sender.clone();
     bench_spsc(sender, reciever)
 }
