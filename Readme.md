@@ -115,4 +115,4 @@ From this I draw the following tentative conclusions:
 mainly due to contention over the counters.
 A version which only keeps counters on the consumer side only (shown in the last set above) can perform on par with an ubounded cache.
 3. False sharing may also become an issue for spsc_queue, but it is currently hidden by other overheads.
-4. Datastructure differences do not seem to account for all the difference in performance between shared and stream mode, though we would need more extensive benchmarking to really tell.
+4. The remaining slowdown seems to be due to the shared counter in stream.
