@@ -68,31 +68,45 @@ currently focusing on the underlying datastructures.
 
 These benchmarks can be run with `cargo +nightly run --release --features "queue_experiments"` and a the results from a typical run are:
 ```
-spsc stream        203 ns/send
-spsc shared        145 ns/send
+spsc stream        201 ns/send
+spsc shared        134 ns/send
 ----
-mpmc baseline       60 ns/send
-aligned             45 ns/send
+mpmc baseline       59 ns/send
+aligned             46 ns/send
 ----
-spsc baseline       73 ns/send
-bigger cache        66 ns/send
-aligned             85 ns/send
+spsc baseline       75 ns/send
+bigger cache        67 ns/send
+aligned             97 ns/send
 unbounded           30 ns/send
 no cache            46 ns/send
-unbounded, aligned  11 ns/send
-no cache, aligned   50 ns/send
+unbounded, aligned  12 ns/send
+no cache, aligned   47 ns/send
 ----
-less contention spsc  28 ns/send
-aligned               10 ns/send
+less contention spsc  35 ns/send
+aligned                9 ns/send
 aligned, size =    1   9 ns/send
-aligned, size =    8   8 ns/send
-aligned, size =   16   8 ns/send
-aligned, size =   32  10 ns/send
-aligned, size =   64   9 ns/send
-aligned, size =  128   9 ns/send
-aligned, size =  256   8 ns/send
-aligned, size =  512  11 ns/send
-aligned, size = 1024   8 ns/send
+aligned, size =    8  10 ns/send
+aligned, size =   16   9 ns/send
+aligned, size =   32  11 ns/send
+aligned, size =   64  10 ns/send
+aligned, size =  128  13 ns/send
+aligned, size =  256  12 ns/send
+aligned, size =  512  13 ns/send
+aligned, size = 1024   9 ns/send
+----
+stream baseline      205 ns/send
+aligned              212 ns/send
+no cache             103 ns/send
+aligned, no cache     91 ns/send
+less contend         179 ns/send
+less contend aligned 102 ns/send
+----
+stream2 baseline     131 ns/send
+aligned              112 ns/send
+no cache              91 ns/send
+aligned, no cache     58 ns/send
+less contend         103 ns/send
+less contend aligned  27 ns/send
 ```
 From this I draw the following tentative conclusions:
 

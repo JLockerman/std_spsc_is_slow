@@ -48,6 +48,9 @@ struct Producer<T, Align> {
 unsafe impl<T: Send, A> Send for Queue<T, A> { }
 unsafe impl<T: Send, A> Sync for Queue<T, A> { }
 
+pub type _Queue<T> = Queue<T, NoAlign>;
+pub type AQueue<T> = Queue<T, CacheAligned>;
+
 pub struct NormalNodeCache;
 pub struct NoNodeCache;
 

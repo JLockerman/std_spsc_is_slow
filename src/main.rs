@@ -48,14 +48,23 @@ fn black_box<T>(t: T) -> T { t }
 #[cfg(feature="queue_experiments")]
 mod spsc;
 
+// A version of spsc where all infmation on chache size is maintained exclusively by the consumer
+#[cfg(feature="queue_experiments")]
+mod spsc2;
+
 // A copy of libstd/sync/mpsc/mpsc_queue.rs to compare with spsc
 // the effects of false sharing
 #[cfg(feature="queue_experiments")]
 mod mpmc;
 
-// A version of spsc where all infmation on chache size is maintained exclusively by the consumer
 #[cfg(feature="queue_experiments")]
-mod spsc2;
+mod blocking;
+
+#[cfg(feature="queue_experiments")]
+mod stream;
+
+#[cfg(feature="queue_experiments")]
+mod stream2;
 
 fn main() {
     println!("spsc stream        {:>3.0} ns/send", bench_mpsc_stream());
@@ -86,6 +95,20 @@ fn main() {
         println!("aligned, size =  256 {:>3.0} ns/send", bench_spsc2_queue(spsc2::Queue::aligned(256)));
         println!("aligned, size =  512 {:>3.0} ns/send", bench_spsc2_queue(spsc2::Queue::aligned(512)));
         println!("aligned, size = 1024 {:>3.0} ns/send", bench_spsc2_queue(spsc2::Queue::aligned(1024)));
+        println!("----");
+        println!("stream baseline      {:>3.0} ns/send", bench_stream(stream::Packet::<spsc::_NQueue<_>, _>::new()));
+        println!("aligned              {:>3.0} ns/send", bench_stream(stream::Packet::<spsc::CNQueue<_>, _>::new()));
+        println!("no cache             {:>3.0} ns/send", bench_stream(stream::Packet::<spsc::__Queue<_>, _>::new()));
+        println!("aligned, no cache    {:>3.0} ns/send", bench_stream(stream::Packet::<spsc::C_Queue<_>, _>::new()));
+        println!("less contend         {:>3.0} ns/send", bench_stream(stream::Packet::<spsc2::_Queue<_>, _>::new()));
+        println!("less contend aligned {:>3.0} ns/send", bench_stream(stream::Packet::<spsc2::AQueue<_>, _>::new()));
+        println!("----");
+        println!("stream2 baseline     {:>3.0} ns/send", bench_stream2(stream2::Packet::<spsc::_NQueue<_>, _>::new()));
+        println!("aligned              {:>3.0} ns/send", bench_stream2(stream2::Packet::<spsc::CNQueue<_>, _>::new()));
+        println!("no cache             {:>3.0} ns/send", bench_stream2(stream2::Packet::<spsc::__Queue<_>, _>::new()));
+        println!("aligned, no cache    {:>3.0} ns/send", bench_stream2(stream2::Packet::<spsc::C_Queue<_>, _>::new()));
+        println!("less contend         {:>3.0} ns/send", bench_stream2(stream2::Packet::<spsc2::_Queue<_>, _>::new()));
+        println!("less contend aligned {:>3.0} ns/send", bench_stream2(stream2::Packet::<spsc2::AQueue<_>, _>::new()));
     }
 
 }
@@ -164,6 +187,56 @@ fn bench_spsc2_queue<A>(queue: spsc2::Queue<u64, A>) -> f64 {
 
         for _i in 0..(COUNT*2) {
             while let None = black_box(rx.pop()) {}
+        }
+    });
+    let d = start.elapsed();
+
+    nanos(d) / ((COUNT*2) as f64)
+}
+
+#[cfg(feature="queue_experiments")]
+fn bench_stream<Q>(queue: stream::Packet<Q, u64>) -> f64
+where Q: stream::Queue<stream::Message<u64>> + Send + Sync {
+    let tx = Arc::new(queue);
+    let rx = tx.clone();
+    let start = ::std::time::Instant::now();
+    scope(|scope| {
+        scope.spawn(move || {
+            for x in 0..(COUNT*2) {
+                let _ = black_box(tx.send(x).unwrap());
+            }
+        });
+
+        for _i in 0..(COUNT*2) {
+            match black_box(rx.recv(None)) {
+                Ok(..) => {}
+                Err(..) => panic!(),
+            }
+        }
+    });
+    let d = start.elapsed();
+
+    nanos(d) / ((COUNT*2) as f64)
+}
+
+#[cfg(feature="queue_experiments")]
+fn bench_stream2<Q>(queue: stream2::Packet<Q, u64>) -> f64
+where Q: stream2::Queue<stream2::Message<u64>> + Send + Sync {
+    let tx = Arc::new(queue);
+    let rx = tx.clone();
+    let start = ::std::time::Instant::now();
+    scope(|scope| {
+        scope.spawn(move || {
+            for x in 0..(COUNT*2) {
+                let _ = black_box(tx.send(x).unwrap());
+            }
+        });
+
+        for _i in 0..(COUNT*2) {
+            match black_box(rx.recv(None)) {
+                Ok(..) => {}
+                Err(e) => panic!("{:?} @ {}", e, _i),
+            }
         }
     });
     let d = start.elapsed();

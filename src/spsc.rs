@@ -71,6 +71,12 @@ impl UseCache for NoNodeCache {
     const USE_CACHE: bool = false;
 }
 
+pub type CNQueue<T> = Queue<T, CacheAligned, NormalNodeCache>;
+#[allow(non_camel_case_types)]
+pub type C_Queue<T> = Queue<T, CacheAligned, NoNodeCache>;
+pub type _NQueue<T> = Queue<T, NoAlign, NormalNodeCache>;
+pub type __Queue<T> = Queue<T, NoAlign, NoNodeCache>;
+
 impl<T> Node<T> {
     fn new() -> *mut Node<T> {
         Box::into_raw(box Node {
