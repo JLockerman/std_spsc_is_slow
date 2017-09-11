@@ -55,49 +55,9 @@ less contend aligned 244 ns/send
 ```
 
 using set-affinity to force threads on separate cores:
+
 ```
-spsc stream        319 ns/send  //XXX this data point cannot be compared to the others, see the rerun at the bottom
-spsc shared        862 ns/send
-----
-mpmc baseline      732 ns/send
-aligned            733 ns/send
-----
-spsc baseline      190 ns/send
-bigger cache       732 ns/send
-aligned            750 ns/send
-unbounded           90 ns/send
-no cache           729 ns/send
-unbounded, aligned  86 ns/send
-no cache, aligned  732 ns/send
-----
-less contention spsc 122 ns/send
-aligned               92 ns/send
-aligned, size =    1  92 ns/send
-aligned, size =    8  93 ns/send
-aligned, size =   16  92 ns/send
-aligned, size =   32  92 ns/send
-aligned, size =   64  92 ns/send
-aligned, size =  128  92 ns/send
-aligned, size =  256  92 ns/send
-aligned, size =  512  92 ns/send
-aligned, size = 1024  92 ns/send
-----
-stream baseline      986 ns/send
-aligned              986 ns/send
-no cache             961 ns/send
-aligned, no cache    961 ns/send
-less contend         359 ns/send
-less contend aligned 360 ns/send
-----
-stream2 baseline     981 ns/send
-aligned              986 ns/send
-no cache             960 ns/send
-aligned, no cache    963 ns/send
-less contend         355 ns/send
-less contend aligned 354 ns/send
-```
-```
-spsc stream        318 ns/send
+spsc stream        318 ns/send  //XXX this data point cannot be compared to the others, see the rerun at
 spsc shared        859 ns/send
 ----
 mpmc baseline      726 ns/send
