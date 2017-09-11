@@ -57,7 +57,7 @@ less contend aligned 244 ns/send
 using set-affinity to force threads on separate cores:
 
 ```
-spsc stream        318 ns/send  //XXX this data point cannot be compared to the others, see the rerun at
+spsc stream        318 ns/send  //XXX this data point cannot be compared to the others, see the rerun at the bottom
 spsc shared        859 ns/send
 ----
 mpmc baseline      726 ns/send
