@@ -115,4 +115,4 @@ From this I draw the following tentative conclusions:
 mainly due to contention over the counters.
 A version which only keeps counters on the consumer side only (shown in the last set above) can perform on par with an ubounded cache.
 3. False sharing may also become an issue for spsc_queue, but it is currently hidden by other overheads.
-4. The remaining slowdown seems to be due to the shared counter in stream.
+4. The remaining slowdown seems to be due to the shared counter in stream, though I am unsure whether this is due to the counter itself, or if it is simply on the same cache line as something else.
