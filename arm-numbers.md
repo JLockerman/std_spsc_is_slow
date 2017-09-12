@@ -11,49 +11,6 @@ CPU max MHz:           1200.0000
 CPU min MHz:           600.0000
 ```
 
-default settings:
-```
-spsc stream        316 ns/send
-spsc shared        528 ns/send
-----
-mpmc baseline      442 ns/send
-aligned            440 ns/send
-----
-spsc baseline      185 ns/send
-bigger cache       182 ns/send
-aligned             91 ns/send
-unbounded          123 ns/send
-no cache           454 ns/send
-unbounded, aligned  91 ns/send
-no cache, aligned  450 ns/send
-----
-less contention spsc 121 ns/send
-aligned              104 ns/send
-aligned, size =    1 105 ns/send
-aligned, size =    8 105 ns/send
-aligned, size =   16 104 ns/send
-aligned, size =   32 105 ns/send
-aligned, size =   64 104 ns/send
-aligned, size =  128 104 ns/send
-aligned, size =  256 104 ns/send
-aligned, size =  512 105 ns/send
-aligned, size = 1024 104 ns/send
-----
-stream baseline      403 ns/send
-aligned              383 ns/send
-no cache             673 ns/send
-aligned, no cache    653 ns/send
-less contend         277 ns/send
-less contend aligned 263 ns/send
-----
-stream2 baseline     396 ns/send
-aligned              369 ns/send
-no cache             655 ns/send
-aligned, no cache    643 ns/send
-less contend         265 ns/send
-less contend aligned 244 ns/send
-```
-
 using set-affinity to force threads on separate cores:
 
 ```
@@ -98,4 +55,47 @@ less contend         363 ns/send
 less contend aligned 362 ns/send
 ---
 spsc stream        1012 ns/send  //XXX this is a rerun of the first benchmark, due to processor throttling it is much slower, since this run is consistent with stream it is more likely to be comparable
+```
+
+default settings (note that this run was much earlier in the day than the one above and may beinvalid due to throttling):
+```
+spsc stream        316 ns/send
+spsc shared        528 ns/send
+----
+mpmc baseline      442 ns/send
+aligned            440 ns/send
+----
+spsc baseline      185 ns/send
+bigger cache       182 ns/send
+aligned             91 ns/send
+unbounded          123 ns/send
+no cache           454 ns/send
+unbounded, aligned  91 ns/send
+no cache, aligned  450 ns/send
+----
+less contention spsc 121 ns/send
+aligned              104 ns/send
+aligned, size =    1 105 ns/send
+aligned, size =    8 105 ns/send
+aligned, size =   16 104 ns/send
+aligned, size =   32 105 ns/send
+aligned, size =   64 104 ns/send
+aligned, size =  128 104 ns/send
+aligned, size =  256 104 ns/send
+aligned, size =  512 105 ns/send
+aligned, size = 1024 104 ns/send
+----
+stream baseline      403 ns/send
+aligned              383 ns/send
+no cache             673 ns/send
+aligned, no cache    653 ns/send
+less contend         277 ns/send
+less contend aligned 263 ns/send
+----
+stream2 baseline     396 ns/send
+aligned              369 ns/send
+no cache             655 ns/send
+aligned, no cache    643 ns/send
+less contend         265 ns/send
+less contend aligned 244 ns/send
 ```
